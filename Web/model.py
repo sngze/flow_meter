@@ -24,8 +24,8 @@ class Database():
 
     def select(self):
          date = "{}-{}-{}".format(datetime.today().year, datetime.today().month, datetime.today().day)
-         sql = "select menu, liters from flow_meter where date = %s order by line;"
-         row = self.execute(sql, date)
+         sql = "select menu, liters from flow_meter where date = %s order by line;" % (date)
+         row = self.executeall(sql)
          return row
 
 
