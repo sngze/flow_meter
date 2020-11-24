@@ -89,7 +89,7 @@
             interestRate = {
                 labels: ["Yirgacheffe", "Sidamo", "Brazil", "Guatemala", "El Salvador",
                     "Colombia", "Mandheling", "Kenya"],  //음료 이름
-                data: [0, 0, 0, 0, 500, 30, 70, 20] //음료 판매량 (리터)
+                data: [0, 0, 0, 0, 0, 0, 0, 0] //음료 판매량 (리터)
             }
             ctx = document.getElementById("myChart").getContext('2d');
             myChart = new Chart(ctx, {
@@ -140,10 +140,14 @@
                     dataType: 'json',
                     success: function (result) {
                         console.log(result)
-                        //interestRate.data[0] += result[0]
-                        //interestRate.data[7] += result[7];
-                        // myChart.data.datasets[0].data[0] = myChart.data.datasets[0].data[0] + result;
-                        // console.log(myChart.data.datasets[0].data[0]);     
+                        interestRate.data[0] = result[0][1];
+                        interestRate.data[1] = result[1][1];
+                        interestRate.data[2] = result[2][1];
+                        interestRate.data[3] = result[3][1];
+                        interestRate.data[4] = result[4][1];
+                        interestRate.data[5] = result[5][1];
+                        interestRate.data[6] = result[6][1];
+                        interestRate.data[7] = result[7][1];
                         index_first = indexOfMax(interestRate.data);
                         index_second = indexOfSecond(interestRate.data, index_first);
                         index_third = indexOfthird(interestRate.data, index_first, index_second);
@@ -159,7 +163,8 @@
         });
 
 
-
+                        // myChart.data.datasets[0].data[0] = myChart.data.datasets[0].data[0] + result;
+                        // console.log(myChart.data.datasets[0].data[0]); 
     //  interestRate = {
     //     labels: [ggg.bank[0], "신한", "우리", "농협은행주식회사", "한국카카오은행주식회사",
     //         "국민은행", "하나은행", "수협은행", "중소기업은행", "부산은행", "대구은행", "광주은행"
@@ -174,7 +179,7 @@
         let today = new Date();
         let month = today.getMonth() + 1; // 월
         let date = today.getDate();  // 일
-        $("#date2").html("<h1>"+month + "월 " + date + "일" + "</h1>")
+        $("#date2").html("<h1>" + month + "월 " + date + "일" + "</h1>")
 
         function indexOfMax(arr) { //1등 인덱스 구하는 함수
             if (arr.length === 0) {
