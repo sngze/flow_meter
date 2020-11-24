@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Bare - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="vendor/bootstrap/scss/creditScore.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="vendor/bootstrap/css/typing.css">
+
+
+    <style>
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+
+        <!--신용등급-->
+        <div class="container">
+            <div class="row">
+                <h2>신용 등급 <small id="date"></small></h2>
+                <!--                    <div class="typewriter">-->
+                <h1>3등급</h1>
+                <!--                    </div>-->
+            </div>
+        </div>
+
+
+        <canvas id="bar-chart-grouped1" width="800" height="450"></canvas>
+        <canvas id="canvas"></canvas>
+        <canvas id="bar-chart-grouped2" width="800" height="450"></canvas>
+
+
+    </div>
+</div> 
+
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.slim.min.js"></script>
+
+<!--금리결과 확인-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<!--final 확인-->
+<script src="vendor/bootstrap/js/Chart.min.js"></script>
+<script src="vendor/bootstrap/js/utils.js"></script>
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>
+
+<!--최종지급이자액(+알파)-->
+<script>
+var obj
+$.ajax({
+                        type : 'POST',                              
+                        url : 'http://localhost:5000/request3',
+                        // data : {
+                        //        SensorID:text_data                     
+                        // },
+                        dataType : 'json',
+                        success : function(result){
+					   ///////////
+					   obj=result
+					   console.log(obj)
+
+					   
+                       //ex) 서버에서 들어올 데이터
+    var finalPaymentInterestAmount = {
+        total: [{
+            labels: [obj[0].name, obj[1].name, obj[2].name, obj[3].name, obj[4].name,
+			obj[5].name, obj[6].name, obj[7].name, obj[8].name],
+            datasets:
+                {
+                    총이자액: [obj[0].expire,obj[1].expire,obj[2].expire, obj[3].expire, obj[4].expire, obj[5].expire, obj[6].expire, obj[7].expire, obj[8].expire]
+                   
+                }
+
+        }, {
+			labels: [obj[0].name, obj[1].name, obj[2].name, obj[3].name, obj[4].name,
+			obj[5].name, obj[6].name, obj[7].name, obj[8].name],
+            datasets:
+                {
+					
+                    총상환금액: [obj[0].total_expire,obj[1].total_expire,obj[2].total_expire, obj[3].total_expire, obj[4].total_expire, obj[5].total_expire, obj[6].total_expire, obj[7].total_expire, obj[8].total_expire]
+            
+                }
+
+        }
+        ]
+	}
+
+
+  // 원리금균등 총이자액 차트
+  new Chart(document.getElementById("bar-chart-grouped1"), {
+        type: 'bar',
+        data: {
+            labels: finalPaymentInterestAmount.total[0].labels,
+            datasets: [
+                {
+                    label: "총 이자액",
+                    backgroundColor: "rgba(255,99,132,1)",
+                    data: finalPaymentInterestAmount.total[0].datasets.총이자액
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: '만기일시 총 이자액'
+            }
+        }
+    });
+
+
+   // 원리금균등 총상환금액 차트
+   new Chart(document.getElementById("bar-chart-grouped2"), {
+        type: 'bar',
+        data: {
+            labels: finalPaymentInterestAmount.total[1].labels,
+            datasets: [
+                {
+                    label: "총 상환금액",
+                    backgroundColor:"#7B68EE",
+                    data: finalPaymentInterestAmount.total[1].datasets.총상환금액
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: '만기일시 총 상환금액'
+            }
+        }
+    });
+
+
+//////////////////////
+
+                        },
+                        error : function(xtr,status,error){
+                                alert(xtr +":"+status+":"+error);
+                        }
+                     
+                });
+
+
+
+
+</script>
+
+<!--오늘 날짜-->
+<script>
+    let today = new Date();
+
+    let month = today.getMonth() + 1; // 월
+    let date = today.getDate();  // 일
+
+    $("#date").html(month + "월 " + date + "일")
+
+</script>
+
+<!--creditScore-->
+<!--<script src="vendor/bootstrap/js/creditScore.js"></script>-->
+
+<script>
+
+
+
+</script>
+
+</body>
+
+</html>

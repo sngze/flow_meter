@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>깡통시장 바리스타</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap/scss/creditScore.css" rel="stylesheet"> -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="{{url_for('static', filename = 'vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename = 'vendor/bootstrap/scss/creditScore.css')}}" rel="stylesheet">
+    <!-- Credit Scoreboard-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,600" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+
+            <!--        신용등급-->
+            <div class="container">
+                <div class="row">
+                    <div class="sixteen columns">
+                        <h2 id="date2">날짜 <small id="date"></small></h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="sixteen columns text-center score-announcement" style="width: 3000px;">
+                        <!-- This is an instance where we need the actual credit score and the page will animate the number growing to the specified amount in the data attribute. -->
+                        <h2 class="score-comment"> 오늘의 커피 </h2>
+                        <h3 data-animate="count-out" data-value="정승제" id="score-actual">0</h3>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!--        신용등급-->
+
+
+            <canvas id="myChart"></canvas>
+
+            <canvas id="bar-chart-grouped" width="800" height="450"></canvas>
+
+
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.slim.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!--금리결과 확인-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+    <!-- Credit Scoreboard-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!--금리결과확인용-->
+    <script>
+        var index_first;
+        var index_second;
+        var index_third;
+        var interestRate;
+        var ctx;
+        var myChart;
+        $(function () {
+            interestRate = {
+                labels: ["Yirgacheffe", "Sidamo", "Brazil", "Guatemala", "El Salvador",
+                    "Colombia", "Mandheling", "Kenya"],  //음료 이름
+                data: [0, 0, 0, 0, 500, 30, 70, 20] //음료 판매량 (리터)
+            }
+            ctx = document.getElementById("myChart").getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: interestRate.labels,
+                    datasets: [{
+                        label: "리터",
+                        data: interestRate.data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 159, 64, 1)',
+                        ],
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: true, // default value. false일 경우 포함된 div의 크기에 맞춰서 그려짐.
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            })
+
+        });
+        $(function () {
+            timer = setInterval(function test() {
+                $.ajax({
+                    url: '/request2',
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log(result)
+                        //interestRate.data[0] += result[0]
+                        //interestRate.data[7] += result[7];
+                        // myChart.data.datasets[0].data[0] = myChart.data.datasets[0].data[0] + result;
+                        // console.log(myChart.data.datasets[0].data[0]);     
+                        index_first = indexOfMax(interestRate.data);
+                        index_second = indexOfSecond(interestRate.data, index_first);
+                        index_third = indexOfthird(interestRate.data, index_first, index_second);
+                        $("#score-actual").html("<p>1등 " + interestRate.labels[index_first] + "</p>" + "<p>2등 " + interestRate.labels[index_second] + "</p>" + "<p>3등 " + interestRate.labels[index_third] + "</p>");
+                        myChart.update();//그래프 갱신
+                    },
+                    error: function (xtr, status, error) {
+                        alert("error");
+                        alert(xtr + ":" + status + ":" + error);
+                    }
+                });
+            }, 1000); //1000 -> 1초
+        });
+
+
+
+    //  interestRate = {
+    //     labels: [ggg.bank[0], "신한", "우리", "농협은행주식회사", "한국카카오은행주식회사",
+    //         "국민은행", "하나은행", "수협은행", "중소기업은행", "부산은행", "대구은행", "광주은행"
+    //         , "한국스탠다드차타드은행", "한국씨티은행", "한국산업은행", "주식회사 케이뱅크은행"],
+    //     data: [1.1, 19, 3, 5, 2, 3, 2, 1, 3, 4, 5, 6, 4, 3, 2, 5]
+    // }
+    </script>
+
+
+    <!--오늘 날짜-->
+    <script>
+        let today = new Date();
+        let month = today.getMonth() + 1; // 월
+        let date = today.getDate();  // 일
+        $("#date2").html("<h1>"+month + "월 " + date + "일" + "</h1>")
+
+        function indexOfMax(arr) { //1등 인덱스 구하는 함수
+            if (arr.length === 0) {
+                return -1;
+            }
+            var max = -1;
+            var maxIndex = 0;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] > max) {
+                    maxIndex = i;
+                    max = arr[i];
+                }
+            }
+            return maxIndex;
+        }
+
+        function indexOfSecond(arr, first) { //2등 인덱스 구하는 함수
+            if (arr.length === 0) {
+                return -1;
+            }
+            var max = -1;
+            var Second_index = 0;
+            for (var i = 0; i < arr.length; i++) {
+                if (i != first) {
+                    if (arr[i] > max) {
+                        Second_index = i;
+                        max = arr[i];
+                    }
+                }
+            }
+            return Second_index;
+        }
+        function indexOfthird(arr, first, second) { //3등 인덱스 구하는 함수
+            if (arr.length === 0) {
+                return -1;
+            }
+            var max = -1;
+            var Third_index = -1;
+            for (var i = 0; i < arr.length; i++) {
+                if (i != first) {
+                    if (i != second) {
+                        if (arr[i] > max) {
+                            Third_index = i;
+                            max = arr[i];
+                        }
+                    }
+                }
+            }
+            console.log(Third_index);
+            return Third_index;
+        }
+
+
+    </script>
+
+    <!--creditScore-->
+    <script src="vendor/bootstrap/js/creditScore.js"></script>
+    <script src="{{url_for('static', filename = 'vendor/bootstrap/js/creditScore.js')}}"></script>
+
+    <script>
+
+
+    </script>
+
+</body>
+
+</html>

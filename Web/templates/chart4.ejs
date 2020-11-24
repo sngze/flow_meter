@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Bare - Start Bootstrap Template</title>
+    <!--금리결과 확인-->
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="vendor/bootstrap/scss/creditScore.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- Page Content -->
+    <div class="container">
+        <div class="row">
+
+            <!--신용등급-->
+            <div class="container">
+                <div class="row">
+                    <h2>신용 등급 <small id="date"></small></h2>
+                    <!--                    <div class="typewriter">-->
+                    <h1>3등급</h1>
+                    <!--                    </div>-->
+                </div>
+            </div>
+
+            <canvas id="canvas"></canvas>
+            <canvas id="bar-chart-grouped1" width="800" height="450"></canvas>
+
+
+
+
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.slim.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!--final 확인-->
+    <script src="vendor/bootstrap/js/Chart.min.js"></script>
+    <script src="vendor/bootstrap/js/utils.js"></script>
+
+    <!--최종지급이자액(+알파)-->
+    <script>
+        var obj
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:5000/request3',
+            // data : {
+            //        SensorID:text_data                     
+            // },
+            dataType: 'json',
+            success: function (result) {
+                console.log(result)
+                obj = result
+                var finalPaymentInterestAmount = {
+                    total: [{
+                        labels: [obj[0].name, obj[1].name, obj[2].name, obj[3].name, obj[4].name,
+                        obj[5].name, obj[6].name, obj[7].name, obj[8].name],
+                        datasets:
+                        {
+                            최솟값: [obj[0].min,obj[1].min,obj[2].min,obj[3].min,obj[4].min, obj[5].min,obj[6].min, obj[7].min, obj[8].min]
+                            ,
+                            평균값: [obj[0].mean,obj[1].mean,obj[2].mean,obj[3].mean,obj[4].mean, obj[5].mean,obj[6].mean, obj[7].mean, obj[8].mean]
+                            ,
+                            최댓값: [obj[0].max,obj[1].max,obj[2].max,obj[3].max,obj[4].max, obj[5].max,obj[6].max, obj[7].max, obj[8].max]
+                            ,
+                            총이자액: [obj[0].principal, obj[1].principal, obj[2].principal, obj[3].principal, obj[4].principal, obj[5].principal, obj[6].principal, obj[7].principal, obj[8].principal]
+
+                        }
+
+                    }]
+                }
+
+                var barChartData = {
+                    labels: finalPaymentInterestAmount.total[0].labels,
+                    datasets: [{
+                        label: '총 이자액 _ 최솟값',
+                        backgroundColor: window.chartColors.red,
+                        stack: 'Stack 0',
+                        data: finalPaymentInterestAmount.total[0].datasets.최솟값
+
+                    }, {
+                        label: '총 이자액 _ 평균값',
+                        backgroundColor: window.chartColors.blue,
+                        stack: 'Stack 0',
+                        data: finalPaymentInterestAmount.total[0].datasets.평균값
+
+                    }, {
+                        label: '총 이자액 _ 최댓값',
+                        backgroundColor: window.chartColors.purple,
+                        stack: 'Stack 0',
+                        data: finalPaymentInterestAmount.total[0].datasets.최댓값
+
+                    }]
+                };
+
+                // 원금균등 총이자액 
+                new Chart(document.getElementById("bar-chart-grouped1"), {
+                    type: 'bar',
+                    data: {
+                        labels: finalPaymentInterestAmount.total[0].labels,
+                        datasets: [
+                            {
+                                label: "총 이자액",
+                                backgroundColor: "rgba(255,99,132,1)",
+                                data: finalPaymentInterestAmount.total[0].datasets.총이자액
+                            }
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: '원금 균등 총 이자액'
+                        }
+                    }
+                });
+
+
+                var ctx = document.getElementById('canvas').getContext('2d');
+                window.myBar = new Chart(ctx, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: {
+                        title: {
+                            display: true,
+                            text: '원금 균등'
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                            }],
+                            yAxes: [{
+                                stacked: true
+                            }]
+                        }
+                    }
+                });
+
+
+
+            },
+            error: function (xtr, status, error) {
+                alert(xtr + ":" + status + ":" + error);
+            }
+
+        });
+
+
+
+    // //ex) 서버에서 들어올 데이터
+
+
+    </script>
+
+    <!--오늘 날짜-->
+    <script>
+        let today = new Date();
+
+        let month = today.getMonth() + 1; // 월
+        let date = today.getDate();  // 일
+
+        $("#date").html(month + "월 " + date + "일")
+
+    </script>
+
+    <!--creditScore-->
+    <!--<script src="vendor/bootstrap/js/creditScore.js"></script>-->
+
+    <script>
+
+
+
+    </script>
+</body>
+
+</html>

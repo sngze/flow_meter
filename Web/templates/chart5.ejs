@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Swiper demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="vendor/bootstrap/css/swiper.min.css">
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="vendor/bootstrap/scss/creditScore.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Demo styles -->
+    <style>
+        html,
+        body {
+            position: relative;
+            height: 100%;
+        }
+
+        body {
+            background: #eee;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+
+            /* Center slide text vertically */
+            /*display: -webkit-box;*/
+            /*display: -ms-flexbox;*/
+            /*display: -webkit-flex;*/
+            /*display: flex;*/
+            /*-webkit-box-pack: center;*/
+            /*-ms-flex-pack: center;*/
+            /*-webkit-justify-content: center;*/
+            /*justify-content: center;*/
+            /*-webkit-box-align: center;*/
+            /*-ms-flex-align: center;*/
+            /*-webkit-align-items: center;*/
+            /*align-items: center;*/
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Swiper -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <canvas id="bar-chart-grouped1" width="800" height="450"></canvas>
+                <canvas id="bar-chart-grouped2" width="800" height="450"></canvas>
+            </div>
+            <div class="swiper-slide">
+                <canvas id="canvas"></canvas>
+                <canvas id="bar-chart-grouped3" width="800" height="450"></canvas>
+            </div>
+            <div class="swiper-slide">
+
+                <canvas id="bar-chart-grouped4" width="800" height="450"></canvas>
+                <canvas id="bar-chart-grouped5" width="800" height="450"></canvas>
+            </div>
+        </div>
+        <!-- Add Arrows -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.slim.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  
+    <!--final 확인-->
+    <script src="vendor/bootstrap/js/Chart.min.js"></script>
+    <script src="vendor/bootstrap/js/utils.js"></script>
+
+    <!-- Swiper JS -->
+    <script src="vendor/bootstrap/js/swiper.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
+
+    <script>
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:5000/request3',
+            // data : {
+            //        SensorID:text_data                     
+            // },
+            dataType: 'json',
+            success: function (result) {
+                
+                obj = result
+                console.log(obj)
+
+                var finalPaymentInterestAmount = {
+                    total: [{
+                        labels: [obj[0].name, obj[1].name, obj[2].name, obj[3].name, obj[4].name,
+                        obj[5].name, obj[6].name, obj[7].name, obj[8].name],
+                        datasets:
+                        {
+                            균등: [obj[0].principal_interest, obj[1].principal_interest, obj[2].principal_interest, obj[3].principal_interest, obj[4].principal_interest, obj[5].principal_interest, obj[6].principal_interest, obj[7].principal_interest, obj[8].principal_interest]
+                            ,
+                            암기: [obj[0].total_principal_interst, obj[1].total_principal_interst, obj[2].total_principal_interst, obj[3].total_principal_interst, obj[4].total_principal_interst, obj[5].total_principal_interst, obj[6].total_principal_interst, obj[7].total_principal_interst, obj[8].total_principal_interst]
+                        }
+
+                    }, {
+                        labels: [obj[0].name, obj[1].name, obj[2].name, obj[3].name, obj[4].name,
+                        obj[5].name, obj[6].name, obj[7].name, obj[8].name],
+                        datasets:
+                        {
+                            최솟값: [obj[0].min, obj[1].min, obj[2].min, obj[3].min, obj[4].min,
+                        obj[5].min, obj[6].min, obj[7].min, obj[8].min]
+                            ,
+                            평균값: [obj[0].mean, obj[1].mean, obj[2].mean, obj[3].mean, obj[4].mean,
+                        obj[5].mean, obj[6].mean, obj[7].mean, obj[8].mean]
+                            ,
+                            최댓값: [obj[0].max, obj[1].max, obj[2].max, obj[3].max, obj[4].max,
+                        obj[5].max, obj[6].max, obj[7].max, obj[8].max]
+                            ,
+                            월상환액: [obj[0].principal, obj[1].principal, obj[2].principal, obj[3].principal, obj[4].principal,
+                        obj[5].principal, obj[6].principal, obj[7].principal, obj[8].principal]
+                        }
+
+                    }, {
+                        labels:  [obj[0].name, obj[1].name, obj[2].name, obj[3].name, obj[4].name,
+                            obj[5].name, obj[6].name, obj[7].name, obj[8].name],
+                        datasets:
+                            {
+                                균등: [obj[0].expire, obj[1].expire, obj[2].expire, obj[3].expire, obj[4].expire,
+                            obj[5].expire, obj[6].expire, obj[7].expire, obj[8].expire]
+                                ,
+                                암기: [obj[0].total_expire, obj[1].total_expire, obj[2].total_expire, obj[3].total_expire, obj[4].total_expire,
+                            obj[5].total_expire, obj[6].total_expire, obj[7].total_expire, obj[8].total_expire]
+                            }
+                        }]
+                }
+
+
+                new Chart(document.getElementById("bar-chart-grouped1"), {
+                    type: 'bar',
+                    data: {
+                        labels: finalPaymentInterestAmount.total[0].labels,
+                        datasets: [
+                            {
+                                label: "총 이자액",
+                                backgroundColor: "rgba(255,99,132,1)",
+                                data: finalPaymentInterestAmount.total[0].datasets.균등
+                            }
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: '원리금 균등'
+                        }
+                    }
+                });
+
+                // 원리금균등 차트 2
+                new Chart(document.getElementById("bar-chart-grouped2"), {
+                    type: 'bar',
+                    data: {
+                        labels: finalPaymentInterestAmount.total[0].labels,
+                        datasets: [
+                            {
+                                label: "총 상환금액",
+                                backgroundColor: "#7B68EE",
+                                data: finalPaymentInterestAmount.total[0].datasets.암기
+                            }
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: ''
+                        }
+                    }
+                });
+
+
+                var barChartData = {
+                    labels: finalPaymentInterestAmount.total[0].labels,
+                    datasets: [{
+                        label: '총 이자액 _ 최솟값',
+                        backgroundColor: window.chartColors.red,
+                        stack: 'Stack 0',
+                        data: finalPaymentInterestAmount.total[1].datasets.최솟값
+
+                    }, {
+                        label: '총 이자액 _ 평균값',
+                        backgroundColor: window.chartColors.blue,
+                        stack: 'Stack 0',
+                        data: finalPaymentInterestAmount.total[1].datasets.평균값
+
+                    }, {
+                        label: '총 이자액 _ 최댓값',
+                        backgroundColor: window.chartColors.purple,
+                        stack: 'Stack 0',
+                        data: finalPaymentInterestAmount.total[1].datasets.최댓값
+
+                    }]
+                };
+                var ctx = document.getElementById('canvas').getContext('2d');
+                window.myBar = new Chart(ctx, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: {
+                        title: {
+                            display: true,
+                            text: '원금 균등'
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                            }],
+                            yAxes: [{
+                                stacked: true
+                            }]
+                        }
+                    }
+                });
+
+                // 원리금균등 차트 2
+                new Chart(document.getElementById("bar-chart-grouped3"), {
+                    type: 'bar',
+                    data: {
+                        labels: finalPaymentInterestAmount.total[0].labels,
+                        datasets: [
+                            {
+                                label: "총 이자액",
+                                backgroundColor: "#7B68EE",
+                                data: finalPaymentInterestAmount.total[0].datasets.암기
+                            }
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: '원금 균등'
+                        }
+                    }
+                });
+
+                var barChartData = {
+                    labels: finalPaymentInterestAmount.total[0].labels,
+                    datasets: [{
+                        label: '최소 월 상환금',
+                        backgroundColor: window.chartColors.red,
+                        stack: 'Stack 0',
+                        data: finalPaymentInterestAmount.total[1].datasets.최솟값
+
+                    }, {
+                        label: '평균 월 상환금',
+                        backgroundColor: window.chartColors.blue,
+                        stack: 'Stack 0',
+                        data: finalPaymentInterestAmount.total[1].datasets.평균값
+
+                    }, {
+                        label: '최대 월 상환금',
+                        backgroundColor: window.chartColors.purple,
+                        stack: 'Stack 0',
+                        data: finalPaymentInterestAmount.total[1].datasets.최댓값
+
+                    }]
+                };
+                var ctx = document.getElementById('canvas').getContext('2d');
+                window.myBar = new Chart(ctx, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: {
+                        title: {
+                            display: true,
+                            text: '원금 균등'
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                            }],
+                            yAxes: [{
+                                stacked: true
+                            }]
+                        }
+                    }
+                });
+
+                // 원리금균등 차트 2
+                new Chart(document.getElementById("bar-chart-grouped3"), {
+                    type: 'bar',
+                    data: {
+                        labels: finalPaymentInterestAmount.total[1].labels,
+                        datasets: [
+                            {
+                                label: "총 이자액",
+                                backgroundColor: "#7B68EE",
+                                data: finalPaymentInterestAmount.total[1].datasets.암기
+                            }
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: ''
+                        }
+                    }
+                });
+
+                // 원리금균등 차트 1
+                new Chart(document.getElementById("bar-chart-grouped4"), {
+                    type: 'bar',
+                    data: {
+                        labels: finalPaymentInterestAmount.total[2].labels,
+                        datasets: [
+                            {
+                                label: "총 이자액",
+                                backgroundColor: "rgba(255,99,132,1)",
+                                data: finalPaymentInterestAmount.total[2].datasets.균등
+                            }
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: '만기일시방법'
+                        }
+                    }
+                });
+
+                // 원리금균등 차트 2
+                new Chart(document.getElementById("bar-chart-grouped5"), {
+                    type: 'bar',
+                    data: {
+                        labels: finalPaymentInterestAmount.total[2].labels,
+                        datasets: [
+                            {
+                                label: "총 상환금액",
+                                backgroundColor: "#7B68EE",
+                                data: finalPaymentInterestAmount.total[2].datasets.암기
+                            }
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: ''
+                        }
+                    }
+                });
+            }, //
+            error: function (xtr, status, error) {
+                alert(xtr + ":" + status + ":" + error);
+            }
+
+        });
+
+    // //ex) 서버에서 들어올 데이터
+
+    </script>
+
+    <!--/////////////////////////////////////////slide page 1///////////////////////////////////////////-->
+    <!--///////////////////////////////////////원리금균등 차트 1 & 2/////////////////////////////////////////-->
+    <script>
+    // 원리금균등 차트 1
+
+    </script>
+    <!--/////////////////////////////////////////END page 1///////////////////////////////////////////-->
+    <!--/////////////////////////////////////////END page 1///////////////////////////////////////////-->
+
+
+    <!--/////////////////////////////////////////slide page 2///////////////////////////////////////////-->
+    <!--///////////////////////////////////////원금 균등 차트 1 & 2/////////////////////////////////////////-->
+    <script>
+
+    </script>
+
+    <!--/////////////////////////////////////////END page 2///////////////////////////////////////////-->
+    <!--/////////////////////////////////////////END page 3///////////////////////////////////////////-->
+
+    <!--/////////////////////////////////////////slide page 2///////////////////////////////////////////-->
+    <!--///////////////////////////////////////원금 균등 차트 1 & 2/////////////////////////////////////////-->
+    <script>
+
+
+    </script>
+
+
+    <!--/////////////////////////////////////////slide page 1///////////////////////////////////////////-->
+    <!--///////////////////////////////////////원리금균등 차트 1 & 2/////////////////////////////////////////-->
+    <script>
+
+    </script>
+    <!--/////////////////////////////////////////END page 1///////////////////////////////////////////-->
+    <!--/////////////////////////////////////////END page 1///////////////////////////////////////////-->
+
+
+    <!--오늘 날짜-->
+    <script>
+        let today = new Date();
+
+        let month = today.getMonth() + 1; // 월
+        let date = today.getDate();  // 일
+
+        $("#date").html(month + "월 " + date + "일")
+
+    </script>
+</body>
+
+</html>

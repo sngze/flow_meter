@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+        <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>  
+        <script>
+      
+      function test(){
+                // var text_data = $('#SensorID').val();
+                $.ajax({
+                        type : 'POST',                              
+                        url : 'http://localhost:5000/request2',
+                        // data : {
+                        //        SensorID:text_data                     
+                        // },
+                        dataType : 'text',
+                        success : function(result){
+                                //alert("result = "+ result);
+                                $("#content").text(result)
+                        },
+                        error : function(xtr,status,error){
+                                alert(xtr +":"+status+":"+error);
+                        }
+                     
+                });
+        }
+       
+
+        </script>
+        <body>
+                <p>ajax 테스트 </p>
+                <!-- <input type = "text" name="SensorID" id="SensorID"/> -->
+                <input type = "button" value = "데이터 요청" onclick="test()"/>
+                <p id=content>   </p>
+        </body>
+</html>
