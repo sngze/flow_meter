@@ -140,6 +140,8 @@
                     dataType: 'json',
                     success: function (result) {
                         console.log(result)
+                        console.log(result[0])
+                        console.log(result[0].menu)
                         interestRate.data[0] = result[0][1];
                         interestRate.data[1] = result[1][1];
                         interestRate.data[2] = result[2][1];
