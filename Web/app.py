@@ -13,6 +13,7 @@ cur = db.cursor()
 
 @app.route('/request2', methods =['POST'])  
 def request2():
+    cur = db.cursor()
     date = "{}-{}-{}".format(datetime.today().year, datetime.today().month, datetime.today().day)
     sql = "select menu, liters from flow_meter where date = %s order by line;"
     cur.execute(sql, date)
