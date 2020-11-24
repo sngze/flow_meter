@@ -1,13 +1,13 @@
 import json
 import pymysql
-import model #DB
+import model
 from flask import Flask, request, render_template,jsonify
 from datetime import datetime
 
 global db, cur
 
 app = Flask(__name__)
-db = model.Database() #디비 
+db = model.Database() 
 app.config['JSON_AS_ASCII'] = False  
 
 db = pymysql.connect(host="localhost", user="raspi", password="0000", db="brewants", charset="utf8")

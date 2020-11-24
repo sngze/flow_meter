@@ -4,7 +4,6 @@ from datetime import datetime
 
 class Database():
     def __init__(self):
-        # self.db_class = Database()
         self.db = pymysql.connect(host='localhost',
                                   user='raspi',
                                   password='0000',
