@@ -1,11 +1,13 @@
 import json
 import pymysql
+import model #DB
 from flask import Flask, request, render_template,jsonify
 from datetime import datetime
 
 global db, cur
 
 app = Flask(__name__)
+db = model.Database() #디비 
 app.config['JSON_AS_ASCII'] = False  
 
 db = pymysql.connect(host="localhost", user="raspi", password="0000", db="brewants", charset="utf8")
@@ -13,13 +15,10 @@ cur = db.cursor()
 
 @app.route('/request2', methods =['POST'])  
 def request2():
-    cur = db.cursor()
-    date = "{}-{}-{}".format(datetime.today().year, datetime.today().month, datetime.today().day)
-    sql = "select menu, liters from flow_meter where date = %s order by line;"
-    cur.execute(sql, date)
-    row = cur.fetchall()
-    print(row)
-    return jsonify(row) 
+    db = model.Database()
+    lists =  db.select() 
+    print(lists)
+    return jsonify(lists) 
 
 @app.route('/chart') 
 def form():
