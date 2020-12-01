@@ -35,6 +35,21 @@ def on_message(client, userdata, msg):
         if "sensor3" in msg.topic:
             menu = menulist[2]
             line = 3
+        if "sensor4" in msg.topic:
+            menu = menulist[3]
+            line = 4
+        if "sensor5" in msg.topic:
+            menu = menulist[4]
+            line = 5
+        if "sensor6" in msg.topic:
+            menu = menulist[5]
+            line = 6
+        if "sensor7" in msg.topic:
+            menu = menulist[6]
+            line = 7
+        if "sensor8" in msg.topic:
+            menu = menulist[7]
+            line = 8
 
         flow = str(msg.payload)
         
