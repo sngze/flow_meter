@@ -7,6 +7,7 @@ global db, cur, menulist
 def on_connect(client, userdata, flags, rc):
     print("MQTT connected with result code " + str(rc))
     client.subscribe("system")
+    client.subscribe("system/+")
     client.subscribe("flowRate/+")
     client.publish("system", "Raspi Connect OK!")
 
