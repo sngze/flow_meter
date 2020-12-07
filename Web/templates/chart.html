@@ -46,7 +46,8 @@
                 <div class="row">
                     <div class="sixteen columns text-center score-announcement" style="width: 3000px;">
                         <!-- This is an instance where we need the actual credit score and the page will animate the number growing to the specified amount in the data attribute. -->
-                        <h2 class="score-comment"> 오늘의 커피 </h2>
+                        <h2 class="score-comment"> 오늘의 베스트셀러 </h2>
+                        <h4>Today's Best Sellers</h4>
                         <h3 data-animate="count-out" data-value="정승제" id="score-actual">0</h3>
 
                     </div>
@@ -87,8 +88,8 @@
         var myChart;
         $(function () {
             interestRate = {
-                labels: ["Yirgacheffe", "Sidamo", "Brazil", "Guatemala", "El Salvador",
-                    "Colombia", "Mandheling", "Kenya"],  //음료 이름
+                labels: ["예가체프(Yirgacheffe)", "시다모(Sidamo)", "브라질(Brazil)", "과테말라(Guatemala)", "엘살바도르(El Salvador)",
+                    "콜롬비아(Colombia)", "만델링(Mandheling)", "케냐(Kenya)"],  //음료 이름
                 data: [0, 0, 0, 0, 0, 0, 0, 0] //음료 판매량 (리터)
             }
             ctx = document.getElementById("myChart").getContext('2d');
@@ -97,7 +98,7 @@
                 data: {
                     labels: interestRate.labels,
                     datasets: [{
-                        label: "리터",
+                        label: "리터(L)",
                         data: interestRate.data,
                         backgroundColor: [
                             'rgba(152, 101, 0, 1)',
@@ -153,7 +154,7 @@
                         index_first = indexOfMax(interestRate.data);
                         index_second = indexOfSecond(interestRate.data, index_first);
                         index_third = indexOfthird(interestRate.data, index_first, index_second);
-                        $("#score-actual").html("<p>1등 " + interestRate.labels[index_first] + "</p>" + "<p>2등 " + interestRate.labels[index_second] + "</p>" + "<p>3등 " + interestRate.labels[index_third] + "</p>");
+                        $("#score-actual").html("<p>1st " + interestRate.labels[index_first] + "</p>" + "<p>2nd " + interestRate.labels[index_second] + "</p>" + "<p>3rd " + interestRate.labels[index_third] + "</p>");
                         myChart.update();//그래프 갱신
                     },
                     error: function (xtr, status, error) {
