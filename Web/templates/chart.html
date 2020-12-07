@@ -80,7 +80,6 @@
 
     <!--금리결과확인용-->
     <script>
-        var label1 = "
         var index_first;
         var index_second;
         var index_third;
@@ -89,7 +88,7 @@
         var myChart;
         $(function () {
             interestRate = {
-                labels: ["예가체프",
+                labels: ["예가체프<br>Yirgacheffe",
                          "시다모",
                          "브라질",
                          "과테말라",
@@ -105,7 +104,7 @@
                 data: {
                     labels: interestRate.labels,
                     datasets: [{
-                        label: "리터(L)",
+                        label: "리터 (L)",
                         data: interestRate.data,
                         backgroundColor: [
                             'rgba(255, 185, 0, 1)',
