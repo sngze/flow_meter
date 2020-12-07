@@ -80,6 +80,7 @@
 
     <!--금리결과확인용-->
     <script>
+        var label1 = "예가체프\nYirgacheffe"
         var index_first;
         var index_second;
         var index_third;
@@ -88,7 +89,7 @@
         var myChart;
         $(function () {
             interestRate = {
-                labels: ["예가체프",
+                labels: [label1,
                          "시다모",
                          "브라질",
                          "과테말라",
@@ -160,7 +161,7 @@
                         index_first = indexOfMax(interestRate.data);
                         index_second = indexOfSecond(interestRate.data, index_first);
                         index_third = indexOfthird(interestRate.data, index_first, index_second);
-                        $("#score-actual").html("<p>1st " + interestRate.labels[index_first] + "</p>" + "<p>2nd " + interestRate.labels[index_second] + "</p>" + "<p>3rd " + interestRate.labels[index_third] + "</p>");
+                        $("#score-actual").html("<p>1st. " + interestRate.labels[index_first] + "</p>" + "<p>2nd. " + interestRate.labels[index_second] + "</p>" + "<p>3rd. " + interestRate.labels[index_third] + "</p>");
                         myChart.update();//그래프 갱신
                     },
                     error: function (xtr, status, error) {
